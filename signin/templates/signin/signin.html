@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도도기록</title>
+  <link rel="stylesheet" href="{% static 'signin/signin.css' %}" />
+</head>
+<body>
+  <div class="mobile-wrapper">
+    <div class="top-bar">
+      <button class="back-button" onclick="history.back()">
+        <img src="{% static 'signin/images/iconoir_nav-arrow-left.png' %}" alt="뒤로 가기">
+      </button>
+      <span class="page-title">회원가입</span>
+    </div>
+
+    <form onsubmit="return false" class="signup-form">
+      <label class="label">아이디</label>
+      <div class="id-wrapper">
+        <div class="input-icon-wrapper">
+          <input type="text" class="login-field" id="uid" placeholder="아이디" required />
+          <img id="check-icon" class="check-icon" src="" alt="확인 아이콘" />
+        </div>
+        <button type="button" class="check-btn">중복확인</button>
+      </div>
+      <p id="id-message" class="description">6~10자 영문, 숫자로 입력해 주세요</p>
+
+      <label class="label-pwd">비밀번호</label>
+      <input type="password" class="pwd-field" id="pwd" placeholder="비밀번호" required />
+      <input type="password" class="pwd-field" id="pwd-check" placeholder="비밀번호 재확인" required />
+      <p id="pwd-message" class="description">6~20자 영문, 숫자, 특수문자를 조합하여 입력해 주세요</p>
+
+      <input type="submit" value="회원가입" class="submit-btn" id="signup-btn" disabled />
+
+      <p class="login-link">
+        <a href="../Login/login.html">이미 가입되어 있으신가요?</a>
+      </p>
+    </form>
+  </div>
+
+  <script>
+    const uidInput = document.getElementById('uid');
+    const checkBtn = document.querySelector('.check-btn');
+    const message = document.getElementById('id-message');
+    const pwdInput = document.getElementById('pwd');
+    const pwdCheckInput = document.getElementById('pwd-check');
+    const pwdMsg = document.getElementById('pwd-message');
+    const signupBtn = document.getElementById('signup-btn');
+    const checkIcon = document.getElementById('check-icon');
+
+    const defaultMsg = '6~10자 영문, 숫자로 입력해 주세요';
+
+    let isIdConfirmed = false;
+    let isPwdValid = false;
+    let isPwdMatched = false;
+
+    function isValidIdFormat(id) {
+      return /^[a-zA-Z0-9]{6,10}$/.test(id);
+    }
+
+    function isValidPasswordFormat(pwd) {
+      return /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-=])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/\-=]{6,20}$/.test(pwd);
+    }
+
+    function updateSignupButtonState() {
+      if (isIdConfirmed && isPwdValid && isPwdMatched) {
+        signupBtn.disabled = false;
+        signupBtn.classList.add('active');
+      } else {
+        signupBtn.disabled = true;
+        signupBtn.classList.remove('active');
+      }
+    }
+
+    function showIcon(valid) {
+      checkIcon.style.display = 'block';
+      checkIcon.src = valid ? "{% static 'signin/images/Radio.png' %}" : "{% static 'signin/images/Radio1.png' %}";
+    }
+
+    uidInput.addEventListener('input', () => {
+      const trimmed = uidInput.value.trim();
+      checkBtn.style.backgroundColor = trimmed ? '#BEF8F5' : '#EDEDF2';
+      checkBtn.style.color = trimmed ? '#4D4D5C' : '#A9A9B7';
+
+      isIdConfirmed = false;
+      uidInput.classList.remove('input-error');
+      message.classList.remove('text-error');
+      message.textContent = defaultMsg;
+      message.style.color = '#00b894';
+      checkIcon.style.display = 'none';
+      updateSignupButtonState();
+    });
+
+    checkBtn.addEventListener('click', () => {
+      const inputId = uidInput.value.trim();
+
+      // 1. 형식 검사
+      if (!isValidIdFormat(inputId)) {
+        message.textContent = '아이디 형식이 올바르지 않습니다.';
+        message.classList.add('text-error');
+        uidInput.classList.add('input-error');
+        showIcon(false);
+        isIdConfirmed = false;
+        updateSignupButtonState();
+        return;
+      }
+
+      // 2. 서버에 fetch 요청
+      fetch('/check-id/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: inputId }) // 보낼 데이터
+      })
+      .then(response => response.json()) // 응답을 json으로 변환
+      .then(data => {// 응답 내용
+        if (data.exists) {//t
+          message.textContent = '중복된 아이디입니다.';
+          message.classList.add('text-error');
+          uidInput.classList.add('input-error');
+          showIcon(false);
+          isIdConfirmed = false;
+        } else {//f
+          message.textContent = '사용 가능한 아이디입니다.';
+          message.style.color = '#0984e3';
+          message.classList.remove('text-error');
+          uidInput.classList.remove('input-error');
+          showIcon(true);
+          isIdConfirmed = true;
+        }
+        updateSignupButtonState();
+      })
+      .catch(error => {
+        console.error('중복 확인 중 에러 발생:', error);
+      });
+    });
+
+
+    pwdInput.addEventListener('input', validatePassword);
+    pwdCheckInput.addEventListener('input', validatePassword);
+
+    function validatePassword() {
+      const pwd = pwdInput.value;
+      const confirm = pwdCheckInput.value;
+
+      isPwdValid = isValidPasswordFormat(pwd);
+      isPwdMatched = pwd === confirm;
+
+      if (!isPwdValid) {
+        pwdInput.classList.add('input-error');
+        pwdMsg.textContent = '비밀번호 형식이 올바르지 않습니다.';
+        pwdMsg.classList.add('text-error');
+      } else if (confirm && !isPwdMatched) {
+        pwdInput.classList.remove('input-error');
+        pwdCheckInput.classList.add('input-error');
+        pwdMsg.textContent = '비밀번호가 일치하지 않습니다.';
+        pwdMsg.classList.add('text-error');
+      } else {
+        pwdInput.classList.remove('input-error');
+        pwdCheckInput.classList.remove('input-error');
+        pwdMsg.textContent = '6~20자 영문, 숫자, 특수문자를 조합하여 입력해 주세요';
+        pwdMsg.classList.remove('text-error');
+      }
+
+      updateSignupButtonState();
+    }
+
+    signupBtn.addEventListener('click', () => {
+      if (!signupBtn.disabled) {
+        window.location.href = '../Login/login.html';
+      }
+    });
+  </script>
+</body>
+</html>
