@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도도기록</title>
+  <link rel="stylesheet" href="{% static 'login/login.css' %}" />
+</head>
+<body>
+  <div class="mobile-wrapper">
+    <img class="logo-image" src="{% static 'login/images/logo.png' %}" alt="logo" />
+    <div>
+      <form method="POST" action="/login/" class="login-form">
+        {% csrf_token %}
+        <input type="text" class="login-field" id="uid" name="uid" placeholder="아이디" required />
+        <input type="password" class="login-field" id="pwd" name="pwd" placeholder="비밀번호" required />
+        <p id="error-message" style="display: {% if messages %}block{% else %}none{% endif %}">
+          {% for message in messages %}
+            {{ message }}
+          {% endfor %}
+        </p>
+
+        <input type="submit" value="로그인" class="submit-btn" disabled />
+      </form>
+      <div class="links">
+        <a href="{%url 'signup'%}" class="link-button">회원가입</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const uidInput = document.getElementById("uid");
+    const pwdInput = document.getElementById("pwd");
+    const loginBtn = document.querySelector(".submit-btn");
+    const errorMessage = document.getElementById("error-message");
+
+    function toggleLoginButton() {
+  const uidFilled = uidInput.value.trim().length > 0;
+  const pwdFilled = pwdInput.value.trim().length > 0;
+
+  if (uidFilled || pwdFilled) {
+    loginBtn.classList.add("active");
+    loginBtn.disabled = false;
+  } else {
+    loginBtn.classList.remove("active");
+    loginBtn.disabled = true;
+  }
+}
+
+
+    uidInput.addEventListener("input", () => {
+      toggleLoginButton();
+      clearError();
+    });
+
+    pwdInput.addEventListener("input", () => {
+      toggleLoginButton();
+      clearError();
+    });
+
+    function showError() {
+      uidInput.classList.add("error");
+      pwdInput.classList.add("error");
+      errorMessage.style.display = "block";
+    }
+
+    function clearError() {
+      uidInput.classList.remove("error");
+      pwdInput.classList.remove("error");
+      errorMessage.style.display = "none";
+    }
+  </script>
+</body>
+</html>
