@@ -38,7 +38,7 @@ def login_view(request):
             user = User.objects.get(user_id=user_id)
             if user.pw == password:
                 # 로그인 성공 시
-                return redirect('/main/')  # url 수정 필요
+                return redirect('/home/')  # url 수정 필요
             else:
                 messages.error(request, '아이디 또는 비밀번호가 틀렸습니다')
         except User.DoesNotExist:
