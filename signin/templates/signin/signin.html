@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="csrf-token" content="{{ csrf_token }}">
   <title>도도기록</title>
   <link rel="stylesheet" href="{% static 'signin/signin.css' %}" />
 </head>
@@ -110,10 +111,13 @@
       }
 
       // 2. 서버에 fetch 요청
+      // csrf 명시 > meta 태그에서 가져옴
+      const csrftoken = document.querySelector('[name=csrf-token]').content;
       fetch('/check-id/', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken,
         },
         body: JSON.stringify({ user_id: inputId }) // 보낼 데이터
       })

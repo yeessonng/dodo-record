@@ -31,3 +31,28 @@ document.querySelectorAll('.marker').forEach(marker => {
 document.querySelector('.add-button').addEventListener('click', () => {
   window.location.href = '../Add/add.html';
 });
+
+async function ensureAccessToken() {
+  const hasAccess = document.cookie.includes("access");
+
+  if (!hasAccess) {
+    try {
+      const response = await fetch("/api/token/refresh-cookie/", {
+        method: "GET",
+        credentials: "include", // 쿠키 포함해서 요청
+      });
+
+      if (!response.ok) {
+        console.warn("토큰 재발급 실패. 로그인 페이지로 이동");
+        window.location.href = "/login/";
+      }
+    } catch (err) {
+      console.error("토큰 갱신 중 에러:", err);
+      window.location.href = "/login/";
+    }
+  }
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+  ensureAccessToken();
+});

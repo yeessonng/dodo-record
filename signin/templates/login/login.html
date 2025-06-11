@@ -11,8 +11,8 @@
   <div class="mobile-wrapper">
     <img class="logo-image" src="{% static 'login/images/logo.png' %}" alt="logo" />
     <div>
-      <form method="POST" action="/login/" class="login-form">
-        {% csrf_token %}
+      <form onsubmit="return handleLogin(event)" class="login-form">
+<!--        {% csrf_token %}-->
         <input type="text" class="login-field" id="uid" name="uid" placeholder="아이디" required />
         <input type="password" class="login-field" id="pwd" name="pwd" placeholder="비밀번호" required />
         <p id="error-message" style="display: {% if messages %}block{% else %}none{% endif %}">
@@ -36,17 +36,17 @@
     const errorMessage = document.getElementById("error-message");
 
     function toggleLoginButton() {
-  const uidFilled = uidInput.value.trim().length > 0;
-  const pwdFilled = pwdInput.value.trim().length > 0;
+      const uidFilled = uidInput.value.trim().length > 0;
+      const pwdFilled = pwdInput.value.trim().length > 0;
 
-  if (uidFilled || pwdFilled) {
-    loginBtn.classList.add("active");
-    loginBtn.disabled = false;
-  } else {
-    loginBtn.classList.remove("active");
-    loginBtn.disabled = true;
-  }
-}
+      if (uidFilled || pwdFilled) {
+        loginBtn.classList.add("active");
+        loginBtn.disabled = false;
+      } else {
+        loginBtn.classList.remove("active");
+        loginBtn.disabled = true;
+      }
+    }
 
 
     uidInput.addEventListener("input", () => {
@@ -69,6 +69,41 @@
       uidInput.classList.remove("error");
       pwdInput.classList.remove("error");
       errorMessage.style.display = "none";
+    }
+
+
+    async function handleLogin(event) {
+      event.preventDefault();  // 폼 제출 막기
+
+      const uid = uidInput.value.trim();
+      const pwd = pwdInput.value.trim();
+
+      try {
+        const response = await fetch("/api/token/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username: uid,
+            password: pwd
+          }),
+        });
+
+        if (!response.ok) {
+          showError();
+          return;
+        }
+
+        const data = await response.json();
+        localStorage.setItem("access", data.access);
+        localStorage.setItem("refresh", data.refresh);
+
+        window.location.href = "/home/";
+      } catch (error) {
+        console.error("로그인 실패:", error);
+        showError();
+      }
     }
   </script>
 </body>

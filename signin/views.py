@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import User
 import json
 
@@ -12,15 +13,14 @@ def signup_page(request):
         password = request.POST.get('pwd')
 
         if User.objects.filter(user_id=username).exists():
-            messages.error(request, '이미 존재하는 아이디입니다.')
             return redirect('/signup/')
 
         User.objects.create(user_id=username, pw=password)
-        messages.success(request, '회원가입 성공!')
         return redirect('/login/') #로그인 경로 매핑
 
     return render(request, 'signin/signin.html')
 
+#아이디 중복 체크
 def check_id(request):
     if request.method == 'POST': #요청 방식이 post일 때만 처리함
         data = json.loads(request.body)
@@ -36,12 +36,16 @@ def login_view(request):
 
         try:
             user = User.objects.get(user_id=user_id)
-            if user.pw == password:
-                # 로그인 성공 시
-                return redirect('/home/')  # url 수정 필요
-            else:
-                messages.error(request, '아이디 또는 비밀번호가 틀렸습니다')
         except User.DoesNotExist:
-            messages.error(request, '아이디 또는 비밀번호가 틀렸습니다')
+            return render(request, 'login/login.html', {'error': '존재하지 않는 사용자입니다'})
 
-    return render(request, 'login/login.html')  # GET 요청 or 실패 시
+        if user.pw != password:
+            return render(request, 'login/login.html', {'error': '비밀번호가 틀렸습니다'})
+
+        refresh = RefreshToken.for_user(user)
+        response = redirect('/home/')  # 로그인 성공 후 이동할 페이지
+        response.set_cookie('access', str(refresh.access_token), httponly=True, samesite='Lax')
+        response.set_cookie('refresh', str(refresh), httponly=True, samesite='Lax')
+        return response
+
+    return render(request, 'login/login.html')
