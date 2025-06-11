@@ -1,10 +1,43 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도도기록</title>
+    <link rel="stylesheet" href="{% static 'travelList/travelList.css' %}" />
 </head>
 <body>
+  <div class="mobile-wrapper">
+    <div class="top-bar">
+      <img
+        src="{% static 'travelList/images/iconoir_nav-arrow-left.png' %}"
+        class="back-icon"
+        onclick="location.href = '../Main/main.html';"
+      />
+      <span id="region-title" class="page-title">지역명</span>
+      <a href="temp.html" class="temp-link">임시저장 목록</a>
+    </div>
 
+    <div id="record-container"></div>
+
+    <button class="add-button" id="add-button">
+      + 기록 추가하기
+    </button>
+  </div>
+
+  <div class="modal-overlay" id="delete-modal" style="display: none;">
+    <div class="modal-content">
+      <img src="{% static 'travelList/images/iconoir_warning-triangle-solid.svg' %}" alt="경고" class="modal-icon" />
+      <p>삭제하시겠어요?</p>
+      <p>기록을 삭제하면 복구할 수 없어요!</p>
+      <div class="modal-buttons">
+        <button onclick="closeModal()">취소</button>
+        <button onclick="deleteCard()">삭제</button>
+      </div>
+    </div>
+  </div>
+
+    <script src="{% static 'travelList/travelList.js' %}"></script>
 </body>
 </html>
