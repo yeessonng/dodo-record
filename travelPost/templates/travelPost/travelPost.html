@@ -1,10 +1,117 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도도기록</title>
+    <link rel="stylesheet" href="{% static 'travelPost/travelPost.css' %}" />
 </head>
 <body>
+  <div class="mobile-wrapper">
+    <div class="top-bar">
+      <img
+        src="{% static 'travelPost/images/iconoir_nav-arrow-left.png' %}"
+        class="back-icon"
+        onclick="history.back()"
+      />
+      <span class="page-title" id="page-title">기록 추가하기</span>
+      <button id="temp-list-btn" class="temp-list">임시저장 목록</button>
+    </div>
+
+    <div class="form">
+      <!-- 1) 제목 입력 -->
+      <input type="text" id="title-input" class="title-underline" placeholder="제목: ex. 2025 가족여행" />
+
+      <!-- 2) 지역 선택 칩 -->
+      <div class="region-group">
+        <div class="region-chip base" id="base-chip">지역</div>
+        <button class="add-region" id="add-region-btn">+ 지역 추가하기</button>
+      </div>
+
+      <!-- 3) 사진 업로드 & 슬라이더 -->
+      <div class="photo-box">
+        <div class="photo-placeholder" id="photo-placeholder">
+          <img src="{% static 'travelPost/images/Group.svg' %} alt="사진 아이콘" />
+          <button type="button" class="photo-button" id="photo-add-btn">사진 추가하기</button>
+          <p>기억에 남는 순간을 추가하세요!</p>
+        </div>
+        <input type="file" id="photo-input" accept="image/*" multiple style="display: none;" />
+        <div id="photo-slider" class="photo-slider" style="display: none;"></div>
+      </div>
+
+      <!-- 4) 이모지 선택 섹션 -->
+      <div class="emoji-section">
+        <button class="add-emoji" aria-label="이모지 추가" id="emoji-toggle">
+          <span class="emoji-icon" id="emoji-display">+</span>
+        </button>
+        <div class="emoji-picker" id="emoji-picker">
+          <span class="emoji-option">🌍</span><span class="emoji-option">🌄</span><span class="emoji-option">✈️</span>
+          <span class="emoji-option">🏨</span><span class="emoji-option">🌇</span><span class="emoji-option">🛳️</span>
+          <span class="emoji-option">🚗</span><span class="emoji-option">🚤</span><span class="emoji-option">🚩</span>
+          <span class="emoji-option">🌞</span><span class="emoji-option">🌊</span><span class="emoji-option">🌿</span>
+          <span class="emoji-option">🍜</span><span class="emoji-option">🍔</span><span class="emoji-option">🍽️</span>
+          <span class="emoji-option">🍷</span><span class="emoji-option">🍳</span><span class="emoji-option">🍦</span>
+          <span class="emoji-option">💃</span><span class="emoji-option">👯</span><span class="emoji-option">👮</span>
+          <span class="emoji-option">😍</span><span class="emoji-option">😁</span><span class="emoji-option">😊</span>
+          <span class="emoji-option">😎</span><span class="emoji-option">🤣</span><span class="emoji-option">😂</span>
+          <span class="emoji-option">😘</span><span class="emoji-option">😭</span><span class="emoji-option">😳</span>
+          <span class="emoji-option">😆</span><span class="emoji-option">😇</span><span class="emoji-option">😋</span>
+          <span class="emoji-option">😌</span><span class="emoji-option">😜</span><span class="emoji-option">😝</span>
+          <span class="emoji-option">😛</span><span class="emoji-option">😢</span><span class="emoji-option">😡</span>
+          <span class="emoji-option">😱</span><span class="emoji-option">😤</span><span class="emoji-option">😷</span>
+          <span class="emoji-option">🤒</span><span class="emoji-option">🤕</span><span class="emoji-option">🤢</span>
+          <span class="emoji-option">🤧</span><span class="emoji-option">🥶</span><span class="emoji-option">🥵</span>
+          <span class="emoji-option">🥳</span><span class="emoji-option">😬</span><span class="emoji-option">😐</span>
+          <span class="emoji-option">😶</span><span class="emoji-option">🙄</span><span class="emoji-option">😯</span>
+          <span class="emoji-option">😲</span><span class="emoji-option">😴</span><span class="emoji-option">😪</span>
+          <span class="emoji-option">😵</span><span class="emoji-option">🤯</span><span class="emoji-option">🤠</span>
+          <span class="emoji-option">🥴</span><span class="emoji-option">🤓</span><span class="emoji-option">🧐</span>
+          <span class="emoji-option">🤨</span><span class="emoji-option">😔</span><span class="emoji-option">😖</span>
+          <span class="emoji-option">😞</span><span class="emoji-option">😟</span><span class="emoji-option">😣</span>
+          <span class="emoji-option">😫</span><span class="emoji-option">😩</span><span class="emoji-option">😓</span>
+          <span class="emoji-option">😥</span><span class="emoji-option">😰</span><span class="emoji-option">🤤</span>
+          <span class="emoji-option">😢</span><span class="emoji-option">😭</span><span class="emoji-option">😤</span>
+          <span class="emoji-option">🤬</span><span class="emoji-option">😠</span><span class="emoji-option">😡</span>
+          <span class="emoji-option">😇</span><span class="emoji-option">😷</span><span class="emoji-option">🤒</span>
+          <span class="emoji-option">🤕</span><span class="emoji-option">🤢</span><span class="emoji-option">🤧</span>
+          <span class="emoji-option">🥵</span><span class="emoji-option">🥶</span><span class="emoji-option">🥴</span>
+          <span class="emoji-option">🤠</span><span class="emoji-option">😈</span><span class="emoji-option">👹</span>
+          <span class="emoji-option">👺</span><span class="emoji-option">💀</span><span class="emoji-option">👻</span>
+          <span class="emoji-option">👽</span><span class="emoji-option">🤖</span><span class="emoji-option">🎃</span>
+          <span class="emoji-option">😺</span><span class="emoji-option">😸</span><span class="emoji-option">😹</span>
+          <span class="emoji-option">😻</span><span class="emoji-option">😼</span><span class="emoji-option">😽</span>
+          <span class="emoji-option">🙀</span><span class="emoji-option">😿</span><span class="emoji-option">😾</span>
+          <span class="emoji-option">🙈</span><span class="emoji-option">🙉</span><span class="emoji-option">🙊</span>
+          <span class="emoji-option">💋</span><span class="emoji-option">💌</span><span class="emoji-option">💘</span>
+          <span class="emoji-option">💝</span><span class="emoji-option">💖</span><span class="emoji-option">💗</span>
+          <span class="emoji-option">💓</span><span class="emoji-option">💞</span><span class="emoji-option">💕</span>
+          <span class="emoji-option">💟</span><span class="emoji-option">❣️</span><span class="emoji-option">❤️</span>
+          <span class="emoji-option">🧡</span><span class="emoji-option">💛</span><span class="emoji-option">💚</span>
+          <span class="emoji-option">💙</span><span class="emoji-option">💜</span><span class="emoji-option">🖤</span>
+          <span class="emoji-option">🤍</span><span class="emoji-option">🤎</span><span class="emoji-option">❤️‍🔥</span>
+          <span class="emoji-option">❤️‍🩹</span><span class="emoji-option">💯</span><span class="emoji-option">💢</span>
+          <span class="emoji-option">💥</span><span class="emoji-option">💫</span><span class="emoji-option">💦</span>
+          <span class="emoji-option">💨</span><span class="emoji-option">🕳️</span><span class="emoji-option">💣</span>
+          <span class="emoji-option">💬</span><span class="emoji-option">🗯️</span><span class="emoji-option">💭</span>
+          <span class="emoji-option">🗨️</span><span class="emoji-option">🕶️</span><span class="emoji-option">👒</span>
+          <span class="emoji-option">🎩</span><span class="emoji-option">👑</span><span class="emoji-option">⛑️</span>
+          <span class="emoji-option">🎒</span><span class="emoji-option">👝</span><span class="emoji-option">👛</span>
+          <span class="emoji-option">👜</span><span class="emoji-option">💼</span><span class="emoji-option">🎓</span>
+          <span class="emoji-option">🧳</span><span class="emoji-option">🧢</span><span class="emoji-option">🥾</span>
+        </div>
+        <div class="emoji-guide">아이콘을 추가해 보세요.</div>
+      </div>
+
+      <!-- 5) 메모 -->
+      <textarea class="memo" id="memo-input" placeholder="그 때의 기억을 되짚어보며 기록해 보세요."></textarea>
+
+      <!-- 6) 버튼: 임시저장, 저장하기 -->
+      <button class="temp-save" id="temp-save-btn">임시저장</button>
+      <button class="save-button" id="save-btn">저장하기</button>
+    </div>
+  </div>
+  <script src="add.js"></script>
 
 </body>
 </html>
