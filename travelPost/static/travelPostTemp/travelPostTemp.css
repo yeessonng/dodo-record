@@ -1,0 +1,225 @@
+body {
+  margin: 0;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  font-family: 'Pretendard', sans-serif;
+}
+
+.mobile-wrapper {
+  width: 375px;
+  height: 758px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  background: var(--Blue-Blue01, #F5FAFF);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  position: relative;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  flex-shrink: 0;
+}
+
+
+.back-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+}
+
+.page-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#record-container {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 80px;
+}
+
+.record-card {
+  background: white;
+  margin: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  overflow: hidden;
+  position: relative;
+}
+
+.record-image {
+  width: 100%;
+  height: 165px;
+  object-fit: cover;
+  display: block;
+}
+
+.record-info {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #23232A;
+}
+
+.emoji {
+  margin-right: 8px;
+}
+
+.tag-list {
+  padding: 10px 14px 14px;
+}
+
+.tag {
+  display: inline-block;
+  background: var(--Blue-Blue03, #C7E3FF);
+  color: var(--Blue-Blue09, #0061C2);
+  font-size: 12px;
+  border-radius: 14px;
+  padding: 4px 8px;
+  margin-right: 4px;
+  margin-top: 4px;
+}
+
+.tag.black {
+  background: var(--Gray-Gray07, #4D4D5C);
+  color: #fff;
+}
+
+.card-menu-toggle {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  font-size: 20px;
+  color: #666;
+  cursor: pointer;
+}
+
+.card-menu {
+  position: absolute;
+  bottom: 48px;
+  right: 14px;
+  background: #fff;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 10;
+  overflow: hidden;
+  width: 110px;
+  padding: 4px 0;
+}
+
+.card-menu .menu-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.card-menu .menu-item img {
+  width: 18px;
+  height: 18px;
+}
+
+.card-menu .menu-item.edit {
+  color: #2C2C2C;
+}
+
+.card-menu .menu-item.delete {
+  color: #FF4D4F;
+}
+
+.card-menu hr {
+  margin: 0;
+  border: none;
+  height: 1px;
+  background-color: #eee;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: -100px; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 100;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 24px 10px;
+  border-radius: 12px;
+  text-align: center;
+  width: 300px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.modal-icon {
+  width: 28px;
+  height: 28px;
+  display: block;
+  margin: 0 auto 12px auto;
+}
+
+.modal-content p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1D1D1F;
+}
+
+.modal-content p + p {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #6e6e73;
+  font-weight: normal;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  margin: 0 10px;
+  width: 120px;
+  height: 40px;
+  font-size: 15px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 5px 35px;
+}
+
+.modal-buttons button:first-child {
+  background: var(--Gray-Gray03, #C7C7D1);
+  color: var(--Gray-Gray09, #2E2E38);
+}
+
+.modal-buttons button:last-child {
+  background: var(--Sub-02, #C8C9FF);
+  color: var(--Purple-Purple09, #0005FA);
+}
