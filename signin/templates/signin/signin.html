@@ -156,19 +156,20 @@
       isPwdMatched = pwd === confirm;
 
       if (!isPwdValid) {
-        pwdInput.classList.add('input-error');
-        pwdMsg.textContent = '비밀번호 형식이 올바르지 않습니다.';
-        pwdMsg.classList.add('text-error');
+          pwdInput.classList.add('input-error');
+          pwdCheckInput.classList.add('input-error');
+          pwdMsg.textContent = '비밀번호 형식이 올바르지 않습니다.';
+          pwdMsg.classList.add('text-error');
       } else if (confirm && !isPwdMatched) {
-        pwdInput.classList.remove('input-error');
-        pwdCheckInput.classList.add('input-error');
-        pwdMsg.textContent = '비밀번호가 일치하지 않습니다.';
-        pwdMsg.classList.add('text-error');
+          pwdInput.classList.add('input-error');
+          pwdCheckInput.classList.add('input-error');
+          pwdMsg.textContent = '비밀번호가 일치하지 않습니다.';
+          pwdMsg.classList.add('text-error');
       } else {
-        pwdInput.classList.remove('input-error');
-        pwdCheckInput.classList.remove('input-error');
-        pwdMsg.textContent = '6~20자 영문, 숫자, 특수문자를 조합하여 입력해 주세요';
-        pwdMsg.classList.remove('text-error');
+          pwdInput.classList.remove('input-error');
+          pwdCheckInput.classList.remove('input-error');
+          pwdMsg.textContent = '6~20자 영문, 숫자, 특수문자를 조합하여 입력해 주세요';
+          pwdMsg.classList.remove('text-error');
       }
 
       updateSignupButtonState();
