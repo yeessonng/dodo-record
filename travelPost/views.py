@@ -5,3 +5,6 @@ def index(request):
 
 def temp(request):
     return render(request, 'travelPostTemp/travelPostTemp.html')
+
+def select_local(request):
+    return render(request, 'travelLocalSelect/travelLocalSelect.html')
