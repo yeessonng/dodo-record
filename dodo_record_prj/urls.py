@@ -22,4 +22,7 @@ urlpatterns = [
     path('', include('signin.urls')),
     path('home/', include('home.urls')),
     path('api/', include('accounts.urls')),
+    path('travelList/', include('travelList.urls')),
+    path('travelPost/', include('travelPost.urls')),
+
 ]
