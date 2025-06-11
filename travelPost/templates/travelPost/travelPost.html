@@ -17,6 +17,11 @@
       />
       <span class="page-title" id="page-title">기록 추가하기</span>
       <button id="temp-list-btn" class="temp-list">임시저장 목록</button>
+        <script>
+            document.getElementById('temp-save-btn').addEventListener('click', function() {
+                window.location.href = '/Temp';
+            });
+        </script>
     </div>
 
     <div class="form">
@@ -108,11 +113,6 @@
 
       <!-- 6) 버튼: 임시저장, 저장하기 -->
       <button class="temp-save" id="temp-save-btn">임시저장</button>
-        <script>
-            document.getElementById('temp-save-btn').addEventListener('click', function() {
-                window.location.href = '/Temp';
-            });
-        </script>
 
 
       <button class="save-button" id="save-btn">저장하기</button>
