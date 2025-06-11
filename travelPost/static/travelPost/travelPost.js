@@ -125,9 +125,13 @@ addRegionBtn.onclick = () => {
   localStorage.setItem("tempTitle", titleInput.value);
   localStorage.setItem("tempEmoji", currentEmoji);
   localStorage.setItem("tempMemo", memoInput.value);
-  let url = `region-select.html?region=${encodeURIComponent(regionParam)}`;
-  if (postIdParam) url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&postId=${encodeURIComponent(postIdParam)}`;
-  else if (editIndex !== null) url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&edit=${encodeURIComponent(editIndex)}`;
+
+  let url = `/travelPost/selectLocal/?region=${encodeURIComponent(regionParam)}`;
+  if (postIdParam)
+    url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&postId=${encodeURIComponent(postIdParam)}`;
+  else if (editIndex !== null)
+    url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&edit=${encodeURIComponent(editIndex)}`;
+
   location.href = url;
 };
 
