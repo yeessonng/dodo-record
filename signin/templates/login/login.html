@@ -15,12 +15,7 @@
 <!--        {% csrf_token %}-->
         <input type="text" class="login-field" id="uid" name="uid" placeholder="아이디" required />
         <input type="password" class="login-field" id="pwd" name="pwd" placeholder="비밀번호" required />
-        <p id="error-message" style="display: {% if messages %}block{% else %}none{% endif %}">
-          {% for message in messages %}
-            {{ message }}
-          {% endfor %}
-        </p>
-
+        <p id="error-message" style="display: none;"></p>
         <input type="submit" value="로그인" class="submit-btn" disabled />
       </form>
       <div class="links">
@@ -59,10 +54,11 @@
       clearError();
     });
 
-    function showError() {
-      uidInput.classList.add("error");
-      pwdInput.classList.add("error");
-      errorMessage.style.display = "block";
+    function showError(message = "아이디 또는 비밀번호가 틀렸습니다.") {
+        uidInput.classList.add("error");
+        pwdInput.classList.add("error");
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
     }
 
     function clearError() {
