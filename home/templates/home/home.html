@@ -93,10 +93,16 @@
       <img src="{% static 'home/images/compass.svg' %}" class="compass" alt="나침반" />
 
       <!-- 기록 추가 버튼 -->
-      <button class="add-button">
+      <button class="add-button" id="add-record-btn">
         <span class="plus-icon">＋</span>
         기록 추가하기
       </button>
+
+        <script>
+            document.getElementById('add-record-btn').addEventListener('click', function () {
+                window.location.href = '/travelPost/travelPost/';
+            });
+        </script>
 
     </div>
   </div>
