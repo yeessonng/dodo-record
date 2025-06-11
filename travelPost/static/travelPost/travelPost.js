@@ -139,117 +139,144 @@ addRegionBtn.onclick = () => {
 
   if (params.length > 0) {
     url += '?' + params.join('&');
-}
+  }
 
-location.href = url;
+  location.href = url;
 
 // 6) 사진 업로드 및 렌더링
-function readFileAsDataURL(file) {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
+  function readFileAsDataURL(file) {
+    return new Promise(resolve => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderPhotos(dataURLs) {
+    photoPlaceholder.style.display = "none";
+    photoSlider.style.display = "flex";
+    photoSlider.innerHTML = "";
+    dataURLs.forEach((url, idx) => {
+      const card = document.createElement("div");
+      card.className = "photo-card";
+      const img = document.createElement("img");
+      img.src = url;
+      card.appendChild(img);
+      const pageIndicator = document.createElement("div");
+      pageIndicator.className = "page-indicator";
+      pageIndicator.textContent = `${idx + 1}/${dataURLs.length}`;
+      card.appendChild(pageIndicator);
+      const replaceBtn = document.createElement("div");
+      replaceBtn.className = "btn-replace";
+      replaceBtn.textContent = "✎";
+      replaceBtn.onclick = async () => {
+        const fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.accept = "image/*";
+        fileInput.onchange = async e => {
+          const f = e.target.files[0];
+          if (f) {
+            existingPhotos[idx] = await readFileAsDataURL(f);
+            renderPhotos(existingPhotos);
+          }
+        };
+        fileInput.click();
+      };
+      const deleteBtn = document.createElement("div");
+      deleteBtn.className = "btn-delete";
+      deleteBtn.textContent = "✕";
+      deleteBtn.onclick = () => {
+        existingPhotos.splice(idx, 1);
+        if (existingPhotos.length) renderPhotos(existingPhotos); else {
+          photoSlider.style.display = "none";
+          photoPlaceholder.style.display = "flex";
+        }
+      };
+      card.append(replaceBtn, deleteBtn);
+      photoSlider.appendChild(card);
+    });
+  }
+
+  photoAddBtn.onclick = () => photoInput.click();
+  photoInput.addEventListener("change", async function () {
+    const files = Array.from(this.files);
+    const urls = await Promise.all(files.map(file => readFileAsDataURL(file)));
+    existingPhotos.push(...urls);
+    renderPhotos(existingPhotos);
+    this.value = "";
   });
-}
-function renderPhotos(dataURLs) {
-  photoPlaceholder.style.display = "none";
-  photoSlider.style.display = "flex";
-  photoSlider.innerHTML = "";
-  dataURLs.forEach((url, idx) => {
-    const card = document.createElement("div");
-    card.className = "photo-card";
-    const img = document.createElement("img");
-    img.src = url;
-    card.appendChild(img);
-    const pageIndicator = document.createElement("div");
-    pageIndicator.className = "page-indicator";
-    pageIndicator.textContent = `${idx + 1}/${dataURLs.length}`;
-    card.appendChild(pageIndicator);
-    const replaceBtn = document.createElement("div"); replaceBtn.className = "btn-replace"; replaceBtn.textContent = "✎"; replaceBtn.onclick = async () => { const fileInput = document.createElement("input"); fileInput.type = "file"; fileInput.accept = "image/*"; fileInput.onchange = async e => { const f = e.target.files[0]; if (f) { existingPhotos[idx] = await readFileAsDataURL(f); renderPhotos(existingPhotos); } }; fileInput.click(); };
-    const deleteBtn = document.createElement("div"); deleteBtn.className = "btn-delete"; deleteBtn.textContent = "✕"; deleteBtn.onclick = () => { existingPhotos.splice(idx, 1); if (existingPhotos.length) renderPhotos(existingPhotos); else { photoSlider.style.display = "none"; photoPlaceholder.style.display = "flex"; } };
-    card.append(replaceBtn, deleteBtn);
-    photoSlider.appendChild(card);
-  });
-}
-photoAddBtn.onclick = () => photoInput.click();
-photoInput.addEventListener("change", async function() {
-  const files = Array.from(this.files);
-  const urls = await Promise.all(files.map(file => readFileAsDataURL(file)));
-  existingPhotos.push(...urls);
-  renderPhotos(existingPhotos);
-  this.value = "";
-});
 
 // 7) 이모지 선택 토글 및 외부 클릭 시 닫기
-emojiToggle.addEventListener("click", () => {
-  emojiPicker.style.display = emojiPicker.style.display === "flex" ? "none" : "flex";
-});
-document.addEventListener("click", e => {
-  if (!emojiPicker.contains(e.target) && !emojiToggle.contains(e.target)) emojiPicker.style.display = "none";
-});
+  emojiToggle.addEventListener("click", () => {
+    emojiPicker.style.display = emojiPicker.style.display === "flex" ? "none" : "flex";
+  });
+  document.addEventListener("click", e => {
+    if (!emojiPicker.contains(e.target) && !emojiToggle.contains(e.target)) emojiPicker.style.display = "none";
+  });
 
 // 8) 이모지 선택 이벤트
-document.querySelectorAll(".emoji-option").forEach(option => {
-  option.addEventListener("click", () => {
-    currentEmoji = option.textContent;
-    emojiDisplay.textContent = currentEmoji;
-    emojiPicker.style.display = "none";
-    emojiGuide.style.display = "none";
+  document.querySelectorAll(".emoji-option").forEach(option => {
+    option.addEventListener("click", () => {
+      currentEmoji = option.textContent;
+      emojiDisplay.textContent = currentEmoji;
+      emojiPicker.style.display = "none";
+      emojiGuide.style.display = "none";
+    });
   });
-});
 
 // 9) 정식 저장
-saveBtn.onclick = () => {
-  if (!titleInput.value.trim()) return alert("제목을 입력해주세요.");
-  if (!existingPhotos.length) return alert("사진을 추가해주세요.");
-  if (!currentEmoji) return alert("이모지를 선택해주세요.");
-  if (!selectedDistricts.length) return alert("세부 지역을 선택해주세요.");
-  const now = new Date().toISOString();
-  const postObj = {
-    id: postIdParam || Date.now().toString(),
-    region: regionParam,
-    districts: [...selectedDistricts],
-    title: titleInput.value.trim(),
-    photos: [...existingPhotos],
-    emoji: currentEmoji,
-    memo: memoInput.value.trim(),
-    createdAt: postIdParam ? JSON.parse(localStorage.getItem("posts")).find(p=>p.id===postIdParam).createdAt : now
+  saveBtn.onclick = () => {
+    if (!titleInput.value.trim()) return alert("제목을 입력해주세요.");
+    if (!existingPhotos.length) return alert("사진을 추가해주세요.");
+    if (!currentEmoji) return alert("이모지를 선택해주세요.");
+    if (!selectedDistricts.length) return alert("세부 지역을 선택해주세요.");
+    const now = new Date().toISOString();
+    const postObj = {
+      id: postIdParam || Date.now().toString(),
+      region: regionParam,
+      districts: [...selectedDistricts],
+      title: titleInput.value.trim(),
+      photos: [...existingPhotos],
+      emoji: currentEmoji,
+      memo: memoInput.value.trim(),
+      createdAt: postIdParam ? JSON.parse(localStorage.getItem("posts")).find(p => p.id === postIdParam).createdAt : now
+    };
+    const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+    if (postIdParam) {
+      const idx = allPosts.findIndex(p => p.id === postIdParam);
+      if (idx > -1) allPosts[idx] = postObj;
+    } else allPosts.push(postObj);
+    localStorage.setItem("posts", JSON.stringify(allPosts));
+    if (editIndex !== null) {
+      const temp = JSON.parse(localStorage.getItem("tempRecords") || "[]");
+      temp.splice(editIndex, 1);
+      localStorage.setItem("tempRecords", JSON.stringify(temp));
+      localStorage.removeItem("editRecord");
+    }
+    location.href = `../Detail/detail.html?region=${encodeURIComponent(regionParam)}`;
   };
-  const allPosts = JSON.parse(localStorage.getItem("posts")||"[]");
-  if (postIdParam) {
-    const idx = allPosts.findIndex(p=>p.id===postIdParam);
-    if (idx>-1) allPosts[idx] = postObj;
-  } else allPosts.push(postObj);
-  localStorage.setItem("posts", JSON.stringify(allPosts));
-  if (editIndex!==null) {
-    const temp = JSON.parse(localStorage.getItem("tempRecords")||"[]");
-    temp.splice(editIndex,1);
-    localStorage.setItem("tempRecords", JSON.stringify(temp));
-    localStorage.removeItem("editRecord");
-  }
-  location.href = `../Detail/detail.html?region=${encodeURIComponent(regionParam)}`;
-};
 
 // 10) 임시 저장
-tempSaveBtn.onclick = () => {
-  const temp = {
-    region: regionParam,
-    title: titleInput.value.trim(),
-    tags: [...selectedDistricts],
-    photos: [...existingPhotos],
-    emoji: currentEmoji,
-    memo: memoInput.value.trim()
+  tempSaveBtn.onclick = () => {
+    const temp = {
+      region: regionParam,
+      title: titleInput.value.trim(),
+      tags: [...selectedDistricts],
+      photos: [...existingPhotos],
+      emoji: currentEmoji,
+      memo: memoInput.value.trim()
+    };
+    const list = JSON.parse(localStorage.getItem("tempRecords") || "[]");
+    if (editIndex !== null) list[editIndex] = temp;
+    else list.push(temp);
+    localStorage.setItem("tempRecords", JSON.stringify(list));
+    localStorage.removeItem("editRecord");
+    location.href = '/travelPost/Temp/';
   };
-  const list = JSON.parse(localStorage.getItem("tempRecords")||"[]");
-  if (editIndex!==null) list[editIndex] = temp;
-  else list.push(temp);
-  localStorage.setItem("tempRecords", JSON.stringify(list));
-  localStorage.removeItem("editRecord");
-  location.href = '/travelPost/Temp/';
-};
 
 // 11) 임시 저장 목록 보기
-tempListBtn.onclick = () => location.href = '/travelPost/Temp/';
+  tempListBtn.onclick = () => location.href = '/travelPost/Temp/';
 
 // 초기 이모지 안내 숨김
-if (currentEmoji) emojiGuide.style.display = 'none';
+  if (currentEmoji) emojiGuide.style.display = 'none';
+}
