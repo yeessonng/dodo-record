@@ -1,0 +1,45 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>지역 선택</title>
+    <link rel="stylesheet" href="{% static 'travelLocalSelect/travelLocalSelect.css' %}" />
+</head>
+<body>
+  <div class="mobile-wrapper">
+    <!-- 상단 바 -->
+    <div class="top-bar">
+      <img src="{% static 'travelLocalSelect/images/iconoir_nav-arrow-left.png' %}" class="back-icon" onclick="history.back()" />
+      <span class="page-title" id="region-title">광역시/도 선택</span>
+    </div>
+
+    <!-- 고정 영역: 검색창 + 선택된 태그(2단계일 때만) -->
+    <div class="fixed-content">
+      <div class="search-bar">
+        <input type="text" id="search" placeholder="지역 내 시/군/구를 검색해보세요" />
+        <img src="{% static 'travelLocalSelect/images/iconoir_search.svg' %}" class="search-icon" />
+      </div>
+      <div class="selected-tags" id="selected-tags"></div>
+      <div class="list-header" id="list-header">목록</div>
+    </div>
+
+    <!-- 스크롤 되는 영역 -->
+    <div class="scrollable-list">
+      <ul class="region-list" id="region-list"></ul>
+    </div>
+
+    <!-- 하단 버튼 -->
+    <div class="bottom-buttons">
+      <button onclick="resetSelection()" class="reset-btn">선택 초기화</button>
+      <button onclick="applySelection()" class="add-btn">지역 추가하기</button>
+    </div>
+  </div>
+
+  <script src="{% static 'travelLocalSelect/travelLocalSelect.js' %}"></script>
+
+
+</body>
+</html>
