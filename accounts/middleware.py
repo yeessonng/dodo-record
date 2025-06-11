@@ -11,13 +11,11 @@ EXCLUDE_PATHS = [
     '/static/',
     '/admin/',
     '/check-id/',
-    # 유진 개발중
-    '/main'
-    '/main/'
-    '/travelList',
-    '/travelList/',
-    '/travelPost',
-    '/travelPost/'
+    # 유진
+    #'/travelList',
+    #'/travelList/',
+    #'/travelPost',
+    #'/travelPost/'
 
 ]
 
