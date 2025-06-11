@@ -100,7 +100,7 @@ const regions = [
     }
     // localStorage에 저장하고 add.html로 복귀
     localStorage.setItem("selectedDistricts", JSON.stringify(selected));
-    location.href = `add.html?region=${encodeURIComponent(currentRegion)}`;
+    location.href = 'post.html';
   }
 
   searchInput.addEventListener("input", () => renderList(searchInput.value));
