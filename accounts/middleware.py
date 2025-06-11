@@ -11,6 +11,10 @@ EXCLUDE_PATHS = [
     '/static/',
     '/admin/',
     '/check-id/',
+    '/travelList',
+    '/travelList/',
+    '/travelPost',
+    '/travelPost/'
 ]
 
 class JWTAuthenticationMiddleware:
