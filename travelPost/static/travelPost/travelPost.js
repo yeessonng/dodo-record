@@ -233,11 +233,11 @@ tempSaveBtn.onclick = () => {
   else list.push(temp);
   localStorage.setItem("tempRecords", JSON.stringify(list));
   localStorage.removeItem("editRecord");
-  location.href = `../Detail/temp.html`;
+  location.href = '/travelPost/Temp/';
 };
 
 // 11) 임시 저장 목록 보기
-tempListBtn.onclick = () => location.href = '../Detail/temp.html';
+tempListBtn.onclick = () => location.href = '/travelPost/Temp/';
 
 // 초기 이모지 안내 숨김
 if (currentEmoji) emojiGuide.style.display = 'none';

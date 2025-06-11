@@ -18,8 +18,8 @@
       <span class="page-title" id="page-title">기록 추가하기</span>
       <button id="temp-list-btn" class="temp-list">임시저장 목록</button>
         <script>
-            document.getElementById('temp-save-btn').addEventListener('click', function() {
-                window.location.href = '/Temp';
+            document.getElementById('temp-list-btn').addEventListener('click', function() {
+                window.location.href = '/travelPost/Temp';
             });
         </script>
     </div>
@@ -118,7 +118,7 @@
       <button class="save-button" id="save-btn">저장하기</button>
     </div>
   </div>
-  <script src="add.js"></script>
+    <script src="{% static 'travelPost/travelPost.js' %}"></script>
 
 </body>
 </html>
