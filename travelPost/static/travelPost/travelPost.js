@@ -126,15 +126,22 @@ addRegionBtn.onclick = () => {
   localStorage.setItem("tempEmoji", currentEmoji);
   localStorage.setItem("tempMemo", memoInput.value);
 
-  //let url = `/travelPost/selectLocal/?region=${encodeURIComponent(regionParam)}`;
   let url = '/travelPost/selectLocal';
-  if (postIdParam)
-    url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&postId=${encodeURIComponent(postIdParam)}`;
-  else if (editIndex !== null)
-    url += `&selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}&edit=${encodeURIComponent(editIndex)}`;
+  let params = [];
 
-  location.href = url;
-};
+  if (postIdParam) {
+    params.push(`selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}`);
+    params.push(`postId=${encodeURIComponent(postIdParam)}`);
+  } else if (editIndex !== null) {
+    params.push(`selected=${encodeURIComponent(JSON.stringify(selectedDistricts))}`);
+    params.push(`edit=${encodeURIComponent(editIndex)}`);
+  }
+
+  if (params.length > 0) {
+    url += '?' + params.join('&');
+}
+
+location.href = url;
 
 // 6) 사진 업로드 및 렌더링
 function readFileAsDataURL(file) {
