@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.contrib.auth.hashers import make_password
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -15,9 +16,9 @@ def signup_page(request):
         if User.objects.filter(user_id=username).exists():
             return redirect('/signup/')
 
-        User.objects.create(user_id=username, pw=password)
+        User.objects.create(user_id=username, pw=make_password(password)) #비밀번호 암호화
         return redirect('/login/') #로그인 경로 매핑
-
+    #get 요청
     return render(request, 'signin/signin.html')
 
 #아이디 중복 체크
