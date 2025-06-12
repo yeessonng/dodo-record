@@ -98,6 +98,12 @@
         기록 추가하기
       </button>
         <script>
+
+          document.getElementById('add-record-btn').addEventListener('click', function () {
+                window.location.href = '/travelPost/';
+            });
+
+
           document.querySelectorAll('.marker').forEach(marker => {
             marker.addEventListener('click', function () {
             const regionId = this.getAttribute('data-region-id');

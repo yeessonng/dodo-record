@@ -14,7 +14,6 @@ EXCLUDE_PATHS = [
     '/static/',
     '/admin/',
     '/check-id/',
-    '/api/ping/',
     # 유진
     #'/travelList',
     #'/travelList/',
