@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>도도기록</title>
+  <link rel="stylesheet" href="record-detail.css" />
+</head>
+<body>
+  <div class="mobile-wrapper">
+    <div class="top-bar">
+      <img
+        src="{% static 'travelListDetail/images/iconoir_nav-arrow-left.png' %}"
+
+        class="back-icon"
+        onclick="location.href = 'detail.html?region=' + encodeURIComponent(regionParam)"
+      />
+      <span class="page-title" id="page-title">제목</span>
+    </div>
+
+    <div class="form">
+      <input
+        type="text"
+        id="title-input"
+        class="title-underline"
+        readonly
+        style="margin-bottom: 16px; font-size: 16px; font-weight: 600; color: #1D1D1F;"
+      />
+
+      <div class="region-group" style="margin-bottom: 12px;">
+        <div class="region-chip base" id="base-chip">지역</div>
+      </div>
+
+      <div class="photo-box" style="margin-bottom: 12px;">
+        <div id="photo-slider" class="photo-slider" style="display: none;"></div>
+      </div>
+
+      <div class="emoji-section" style="pointer-events: none; margin-bottom: 12px;">
+        <span class="emoji-icon" id="emoji-display"></span>
+      </div>
+
+      <textarea
+        class="memo"
+        id="memo-input"
+        readonly
+        style="background-color: #F5F5F5;"
+        placeholder="메모가 없습니다."
+      ></textarea>
+    </div>
+
+    <div class="modal-overlay" id="delete-modal" style="display: none;">
+        <div class="modal-content">
+          <img src="../images/iconoir_warning-triangle-solid.svg" alt="경고" class="warning-icon" />
+          <p>정말 삭제하시겠습니까?</p>
+          <button id="confirm-delete">삭제</button>
+          <button id="cancel-delete">취소</button>
+        </div>
+      </div>
+  </div>
+
+  <script src="record-detail.js"></script>
+</body>
+</html>
