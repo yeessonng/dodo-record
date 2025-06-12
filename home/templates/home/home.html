@@ -19,71 +19,71 @@
         <img src="{% static 'home/images/Map.svg' %}" alt="대한민국 지도" class="map-image" />
 
         <!-- 지도 핀 위치 -->
-        <div class="marker" style="top: 85px; left: 120px;" data-region="서울">
+        <div class="marker" style="top: 85px; left: 120px;" data-region="서울" data-region-id="1">
           <span class="region">서울</span>
           <span class="count-circle">{{ count_by_region.1|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 65px; left: 70px;" data-region="인천">
+        <div class="marker" style="top: 65px; left: 70px;" data-region="인천" data-region-id="3">
           <span class="region">인천</span>
           <span class="count-circle">{{ count_by_region.3|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 70px; left: 220px;" data-region="강원">
+        <div class="marker" style="top: 70px; left: 220px;" data-region="강원" data-region-id="4">
           <span class="region">강원</span>
           <span class="count-circle">{{ count_by_region.4|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 120px; left: 160px;" data-region="경기">
+        <div class="marker" style="top: 120px; left: 160px;" data-region="경기" data-region-id="2">
           <span class="region">경기</span>
           <span class="count-circle">{{ count_by_region.2|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 145px; left: 210px;" data-region="충북">
+        <div class="marker" style="top: 145px; left: 210px;" data-region="충북" data-region-id="5">
           <span class="region">충북</span>
           <span class="count-circle">{{ count_by_region.5|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 170px; left: 280px;" data-region="경북">
+        <div class="marker" style="top: 170px; left: 280px;" data-region="경북" data-region-id="9">
           <span class="region">경북</span>
           <span class="count-circle">{{ count_by_region.9|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 202px; left: 150px;" data-region="대전">
+        <div class="marker" style="top: 202px; left: 150px;" data-region="대전" data-region-id="8">
           <span class="region">대전</span>
           <span class="count-circle">{{ count_by_region.8|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 240px; left: 240px;" data-region="대구">
+        <div class="marker" style="top: 240px; left: 240px;" data-region="대구" data-region-id="11">
           <span class="region">대구</span>
           <span class="count-circle">{{ count_by_region.11|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 265px; left: 300px;" data-region="울산">
+        <div class="marker" style="top: 265px; left: 300px;" data-region="울산" data-region-id="12">
           <span class="region">울산</span>
           <span class="count-circle">{{ count_by_region.12|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 166px; left: 135px;" data-region="세종">
+        <div class="marker" style="top: 166px; left: 135px;" data-region="세종" data-region-id="7">
           <span class="region">세종</span>
           <span class="count-circle">{{ count_by_region.7|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 190px; left: 90px;" data-region="충남">
+        <div class="marker" style="top: 190px; left: 90px;" data-region="충남" data-region-id="6">
           <span class="region">충남</span>
           <span class="count-circle">{{ count_by_region.6|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 260px; left: 120px;" data-region="전북">
+        <div class="marker" style="top: 260px; left: 120px;" data-region="전북" data-region-id="14">
           <span class="region">전북</span>
           <span class="count-circle">{{ count_by_region.14|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 305px; left: 110px;" data-region="광주">
+        <div class="marker" style="top: 305px; left: 110px;" data-region="광주" data-region-id="16">
           <span class="region">광주</span>
           <span class="count-circle">{{ count_by_region.16|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 350px; left: 120px;" data-region="전남">
+        <div class="marker" style="top: 350px; left: 120px;" data-region="전남" data-region-id="15">
           <span class="region">전남</span>
           <span class="count-circle">{{ count_by_region.15|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 300px; left: 210px;" data-region="경남">
+        <div class="marker" style="top: 300px; left: 210px;" data-region="경남" data-region-id="10">
           <span class="region">경남</span>
           <span class="count-circle">{{ count_by_region.10|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 303px; left: 285px;" data-region="부산">
+        <div class="marker" style="top: 303px; left: 285px;" data-region="부산" data-region-id="13">
           <span class="region">부산</span>
           <span class="count-circle">{{ count_by_region.13|default:"0" }}</span>
         </div>
-        <div class="marker" style="top: 450px; left: 100px;" data-region="제주">
+        <div class="marker" style="top: 450px; left: 100px;" data-region="제주" data-region-id="17">
           <span class="region">제주</span>
           <span class="count-circle">{{ count_by_region.17|default:"0" }}</span>
         </div>
@@ -102,12 +102,20 @@
             document.getElementById('add-record-btn').addEventListener('click', function () {
                 window.location.href = '/travelPost/';
             });
+
+          document.querySelectorAll('.marker').forEach(marker => {
+            marker.addEventListener('click', function () {
+            const regionId = this.getAttribute('data-region-id');
+            if (regionId) {
+              window.location.href = `/travelList/region/${regionId}/`;
+              }
+            });
+          });
         </script>
 
     </div>
   </div>
 
-  <script src="{% static 'home/home.js' %}"></script>
 
 </body>
 </html>

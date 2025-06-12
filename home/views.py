@@ -3,13 +3,7 @@ from accounts.utils import get_user_from_access_token
 from travelPost.models import Post
 
 def home_view(request):
-    access_token = request.COOKIES.get('access')
-    if not access_token:
-        return redirect('/login/')
-    try:
-        user = get_user_from_access_token(access_token)
-    except Exception:
-        return redirect('/login/')
+    user = request.user
 
     posts = Post.objects.filter(user=user)
 

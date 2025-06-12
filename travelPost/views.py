@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 def index(request):
+    if not hasattr(request, 'user') or str(request.user) == 'AnonymousUser':
+        return redirect('/login/')
+
     return render(request, 'travelPost/travelPost.html')
 
 def temp(request):
