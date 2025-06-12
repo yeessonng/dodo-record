@@ -5,8 +5,8 @@ from rest_framework_simplejwt.exceptions import TokenError
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
+#로그인 요청 처리(jwt 발급, 쿠키 저장)
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 

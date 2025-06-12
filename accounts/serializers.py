@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.hashers import check_password
 from signin.models import User
 
 class CustomTokenObtainPairSerializer(serializers.Serializer):
@@ -16,7 +17,7 @@ class CustomTokenObtainPairSerializer(serializers.Serializer):
         except User.DoesNotExist:
             raise AuthenticationFailed("존재하지 않는 사용자입니다.")
 
-        if user.pw != password:
+        if not check_password(password, user.pw):  # 해싱된 비밀번호 비교
             raise AuthenticationFailed("비밀번호가 틀렸습니다.")
 
         # 직접 토큰 생성

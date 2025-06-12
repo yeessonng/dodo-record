@@ -96,8 +96,9 @@
       updateSignupButtonState();
     });
 
+    // 회원가입 로직
     checkBtn.addEventListener('click', () => {
-      const inputId = uidInput.value.trim();
+      const inputId = uidInput.value.trim(); // id 공백 제거
 
       // 1. 형식 검사
       if (!isValidIdFormat(inputId)) {
@@ -113,6 +114,7 @@
       // 2. 서버에 fetch 요청
       // csrf 명시 > meta 태그에서 가져옴
       const csrftoken = document.querySelector('[name=csrf-token]').content;
+      // 아이디 중복 검사
       fetch('/check-id/', {
         method: 'POST',
         headers: {
