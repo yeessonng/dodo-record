@@ -66,8 +66,8 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware'
-    # 'accounts.middleware.JWTAuthenticationMiddleware', #유진주석
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'accounts.middleware.JWTAuthenticationMiddleware', #유진주석
 ]
 
 ROOT_URLCONF = 'dodo_record_prj.urls'
