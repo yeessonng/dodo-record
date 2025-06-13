@@ -16,6 +16,7 @@
         onclick="location.href = '/home/';"
       />
       <span id="region-title" class="page-title">지역명</span>
+          <h4>{{ region_name }}</h4> <!-- test용..... 지워두 댐-->
       <a href="temp.html" class="temp-link">임시저장 목록</a>
     </div>
 
@@ -37,8 +38,6 @@
       </div>
     </div>
   </div>
-  <h1>{{ region_id }}번 지역입니다</h1> <!-- test용..... 지워두 댐-->
-
     <script src="{% static 'travelList/travelList.js' %}"></script>
 </body>
 </html>
