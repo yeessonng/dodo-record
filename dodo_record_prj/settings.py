@@ -55,8 +55,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10), #access token 유효 시간
-    'REFRESH_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(seconds=10), #access token 유효 시간
+    'REFRESH_TOKEN_LIFETIME': timedelta(seconds=20),
 }
 
 MIDDLEWARE = [
