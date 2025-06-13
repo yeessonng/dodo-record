@@ -19,7 +19,6 @@ EXCLUDE_PATHS = [
     #'/travelList/',
     #'/travelPost',
     #'/travelPost/'
-
 ]
 #모든 요청이 들어올 때 마다 쿠키에 access 토큰이 유효한지 확인 후, user 등록
 class JWTAuthenticationMiddleware:
