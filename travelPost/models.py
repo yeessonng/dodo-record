@@ -17,7 +17,7 @@ class Subregion(models.Model):
 
 class Post(models.Model):
     title = models.TextField(null=True, blank=True)
-    icon = models.CharField(max_length=1, null=True, blank=True)
+    icon = models.CharField(max_length=8, null=True, blank=True)
     body = models.TextField(null=True, blank=True)
     status = models.BooleanField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

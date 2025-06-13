@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
 
     # 여행 기록 글쓰기
-    path('', views.index, name='travelPost'),
+    path('', views.create_post, name='travelPost'),
 
     # 임시저장
     path('Temp/', views.temp, name='travelPostTemp'),

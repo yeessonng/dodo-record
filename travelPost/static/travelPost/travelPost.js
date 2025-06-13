@@ -255,7 +255,7 @@ saveBtn.onclick = () => {
     allPosts.push(postObj);
   }
 
-  localStorage.setItem("posts", JSON.stringify(allPosts));
+   localStorage.setItem("posts", JSON.stringify(allPosts));
 
   if (editIndex !== null) {
     const temp = JSON.parse(localStorage.getItem("tempRecords") || "[]");
@@ -264,7 +264,10 @@ saveBtn.onclick = () => {
     localStorage.removeItem("editRecord");
   }
 
-  location.href = `../Detail/detail.html?region=${encodeURIComponent(regionParam)}`;
+  // location.href = `/travelList/detail/?region=${encodeURIComponent(regionParam)}`;
+  location.href = `/home`;
+
+
 };
 
 // 임시 저장

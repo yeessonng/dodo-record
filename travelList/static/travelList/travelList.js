@@ -45,12 +45,12 @@ const params = new URLSearchParams(window.location.search);
         <div class="card-menu-toggle" onclick="toggleMenu(event)">⋯</div>
         <div class="card-menu" style="display: none;">
           <button class="menu-item edit" onclick="editCard(event, '${record.id}')">
-            <img src="../images/iconoir_map-pin.svg" alt="편집 아이콘" />
+            <img src="/static/travelList/images/iconoir_map-pin.svg" alt="편집 아이콘" />
             <span>편집하기</span>
           </button>
           <hr />
           <button class="menu-item delete" onclick="confirmDelete(event)">
-            <img src="../images/iconoir_trash.svg" alt="삭제 아이콘" />
+            <img src="/static/travelList/images/iconoir_trash.svg" alt="삭제 아이콘" />
             <span>삭제하기</span>
           </button>
         </div>
