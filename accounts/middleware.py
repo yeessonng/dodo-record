@@ -42,6 +42,7 @@ class JWTAuthenticationMiddleware:
         # 토큰 있으면 유저 정보 꺼냄
         try:
             user = get_user_from_access_token(access_token)
+            user.is_authenticated = True ##
             request.user = user # !!!뷰에서 request.user로 접근 가능!!!
         except Exception:
             # access 만료 → refresh로 재발급 시도
@@ -51,7 +52,9 @@ class JWTAuthenticationMiddleware:
                     #새 access토큰 생성
                     new_access = str(refresh.access_token)
 
-                    request.user = get_user_from_access_token(new_access)
+                    refreshed_user = get_user_from_access_token(new_access)
+                    refreshed_user.is_authenticated = True
+                    request.user = refreshed_user
 
                     response = self.get_response(request)
                     response.set_cookie(
