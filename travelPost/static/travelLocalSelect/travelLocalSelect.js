@@ -100,6 +100,7 @@ const regions = [
     }
     // localStorage에 저장하고 add.html로 복귀
     localStorage.setItem("selectedDistricts", JSON.stringify(selected));
+    localStorage.setItem("tempRegion", currentRegion);  // 유진 추가; 광역시도 저장
     location.href = '/travelPost/';
   }
 

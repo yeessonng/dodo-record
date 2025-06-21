@@ -41,6 +41,18 @@ if (regionParam && regionParam !== '지역') {
 // 2) 세부 지역 칩 렌더링
 function renderDistrictChips() {
   regionGroupEl.querySelectorAll(".region-chip.sub").forEach(el => el.remove());
+  // 유진추가
+
+  //광역시 chip 추가
+  const tempRegion = localStorage.getItem("tempRegion");
+  if (tempRegion) {
+    const mainChip = document.createElement("div");
+    mainChip.className = "region-chip main";
+    mainChip.textContent = tempRegion;
+    regionGroupEl.insertBefore(mainChip, addRegionBtn);
+  }
+
+
   selectedDistricts.forEach(district => {
     const tag = document.createElement("div");
     tag.className = "region-chip sub";
@@ -91,8 +103,8 @@ function renderDistrictChips() {
 
 // 4) 수정 모드 처리
 if (postIdParam) {
-  const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-  const target = allPosts.find(p => p.id === postIdParam);
+   const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
+   const target = allPosts.find(p => p.id === postIdParam);
   if (target) {
     regionParam = target.region;
     baseChipEl.textContent = regionParam;
@@ -228,68 +240,97 @@ document.querySelectorAll(".emoji-option").forEach(option => {
   });
 });
 
+// CSRF 토큰 꺼내기 (이 함수 먼저 정의해두세요)
+function getCookie(name) {
+  const cookies = document.cookie.split(";");
+  for (let cookie of cookies) {
+    const [key, value] = cookie.trim().split("=");
+    if (key === name) return decodeURIComponent(value);
+  }
+  return null;
+}
+
+
 // 저장
-saveBtn.onclick = () => {
+saveBtn.onclick = async () => {
+
   if (!titleInput.value.trim()) return alert("제목을 입력해주세요.");
   if (!existingPhotos.length) return alert("사진을 추가해주세요.");
   if (!currentEmoji) return alert("이모지를 선택해주세요.");
   if (!selectedDistricts.length) return alert("세부 지역을 선택해주세요.");
 
-  const now = new Date().toISOString();
-  const postObj = {
-    id: postIdParam || Date.now().toString(),
-    region: regionParam,
-    districts: [...selectedDistricts],
-    title: titleInput.value.trim(),
-    photos: [...existingPhotos],
-    emoji: currentEmoji,
-    memo: memoInput.value.trim(),
-    createdAt: postIdParam ? JSON.parse(localStorage.getItem("posts")).find(p => p.id === postIdParam).createdAt : now
-  };
+  try {
+    const response = await fetch("/travelPost/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: new URLSearchParams({
+        title: titleInput.value.trim(),
+        body: memoInput.value.trim(),
+        icon: currentEmoji,
+        status: "true"
+      })
+    });
 
-  const allPosts = JSON.parse(localStorage.getItem("posts") || "[]");
-  if (postIdParam) {
-    const idx = allPosts.findIndex(p => p.id === postIdParam);
-    if (idx > -1) allPosts[idx] = postObj;
-  } else {
-    allPosts.push(postObj);
+    if (response.redirected) {
+      location.href = response.url;
+    } else {
+      const result = await response.text(); // or response.json()
+      console.log("서버 응답:", result);
+    }
+  } catch (err) {
+    console.error("저장 중 오류 발생:", err);
+    alert("저장 중 오류가 발생했습니다.");
   }
-
-   localStorage.setItem("posts", JSON.stringify(allPosts));
-
-  if (editIndex !== null) {
-    const temp = JSON.parse(localStorage.getItem("tempRecords") || "[]");
-    temp.splice(editIndex, 1);
-    localStorage.setItem("tempRecords", JSON.stringify(temp));
-    localStorage.removeItem("editRecord");
-  }
-
-  // location.href = `/travelList/detail/?region=${encodeURIComponent(regionParam)}`;
-  location.href = `/home`;
-
 
 };
 
 // 임시 저장
-tempSaveBtn.onclick = () => {
-  const temp = {
+tempSaveBtn.onclick = async () => {
+
+  const tempData = {
     region: regionParam,
     title: titleInput.value.trim(),
     tags: [...selectedDistricts],
     photos: [...existingPhotos],
     emoji: currentEmoji,
-    memo: memoInput.value.trim()
+    memo: memoInput.value.trim(),
+    status: "false"  // 임시 저장 표시
   };
-  const list = JSON.parse(localStorage.getItem("tempRecords") || "[]");
-  if (editIndex !== null) list[editIndex] = temp;
-  else list.push(temp);
-  localStorage.setItem("tempRecords", JSON.stringify(list));
-  localStorage.removeItem("editRecord");
+
+  await fetch("/travelPost/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "X-CSRFToken": getCookie("csrftoken")
+    },
+    body: new URLSearchParams(tempData)
+  });
+
   location.href = '/travelPost/Temp/';
 };
 
+
 // 임시 목록 버튼
-tempListBtn.onclick = () => location.href = '/travelPost/Temp/';
+tempListBtn.onclick = () => location.href = '/travelPost/Temp';
 
 // 초기 이모지 안내 숨김
 if (currentEmoji) emojiGuide.style.display = 'none';
+
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById("record-container");
+    fetch('/travelPost/tempList/')
+    .then(res => res.json())
+    .then(data => {
+      console.log('받은 데이터:', data);
+      container.innerHTML = "";  // 초기화
+      data.posts.forEach(post => {
+        const card = document.createElement("div");
+        card.textContent = post.title;
+        container.appendChild(card);
+      });
+    })
+    .catch(err => console.error(err));
+});

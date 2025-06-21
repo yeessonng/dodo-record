@@ -20,6 +20,7 @@
       <a href="temp.html" class="temp-link">임시저장 목록</a>
     </div>
 
+
     <div id="record-container"></div>
 
     <button class="add-button" id="add-button">
@@ -38,6 +39,14 @@
       </div>
     </div>
   </div>
+
+    <script> // 이미지 .js로 넘기기
+        const STATIC_URL = "{% static '' %}";
+
+        const ICON_MAP_PIN = STATIC_URL + "travelPostTemp/images/iconoir_map-pin.svg";
+        const ICON_TRASH = STATIC_URL + "travelPostTemp/images/iconoir_trash.svg";
+    </script>
+
     <script src="{% static 'travelList/travelList.js' %}"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>도도기록</title>
-    <link rel="stylesheet" href="{% static 'travelPost/travelPost.css' %}" />
+  <link rel="stylesheet" href="{% static 'travelPost/travelPost.css' %}" />
 </head>
 <body>
   <div class="mobile-wrapper">
@@ -20,16 +20,16 @@
     </div>
 
     <div class="form">
-      <!-- 1) 제목 입력 -->
+      <!-- 제목 입력 -->
       <input type="text" id="title-input" class="title-underline" placeholder="제목: ex. 2025 가족여행" />
 
-      <!-- 2) 지역 선택 칩 -->
+      <!-- 지역 선택 칩 -->
       <div class="region-group">
         <div class="region-chip base" id="base-chip">지역</div>
         <button class="add-region" id="add-region-btn">+ 지역 추가하기</button>
       </div>
 
-      <!-- 3) 사진 업로드 & 슬라이더 -->
+      <!-- 사진 업로드 & 슬라이더 -->
       <div class="photo-box">
         <div class="photo-placeholder" id="photo-placeholder">
           <img src="{% static 'travelPost/images/Group.svg' %}" alt="사진 아이콘" />
@@ -40,7 +40,7 @@
         <div id="photo-slider" class="photo-slider" style="display: none;"></div>
       </div>
 
-      <!-- 4) 이모지 선택 섹션 -->
+      <!-- 이모지 선택 섹션 -->
       <div class="emoji-section">
         <button class="add-emoji" aria-label="이모지 추가" id="emoji-toggle">
           <span class="emoji-icon" id="emoji-display">+</span>
@@ -103,15 +103,15 @@
         <div class="emoji-guide">아이콘을 추가해 보세요.</div>
       </div>
 
-      <!-- 5) 메모 -->
+      <!-- 메모 -->
       <textarea class="memo" id="memo-input" placeholder="그 때의 기억을 되짚어보며 기록해 보세요."></textarea>
 
-      <!-- 6) 버튼: 임시저장, 저장하기 -->
+      <!-- 버튼: 임시저장, 저장하기 -->
       <button class="temp-save" id="temp-save-btn">임시저장</button>
       <button class="save-button" id="save-btn">저장하기</button>
     </div>
   </div>
-    <script src="{% static 'travelPost/travelPost.js' %}"></script>
 
+  <script src="{% static 'travelPost/travelPost.js' %}"></script>
 </body>
 </html>

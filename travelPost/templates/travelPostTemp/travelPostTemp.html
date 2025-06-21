@@ -16,6 +16,59 @@
     </div>
 
     <div id="record-container"></div>
+      <script>
+          fetch('/travelPost/tempList/')
+  .then(response => response.json())
+  .then(data => {
+    const container = document.getElementById("record-container");
+    container.innerHTML = '';  // 초기화
+
+    if (!data.posts || data.posts.length === 0) {
+      const empty = document.createElement("p");
+      empty.textContent = "임시 저장된 기록이 없습니다.";
+      container.appendChild(empty);
+      return;
+    }
+
+    data.posts.forEach((record, index) => {
+      const card = document.createElement("div");
+      card.className = "record-card";
+
+      const regionList = Array.isArray(record.region) ? record.region : [];
+      const mainRegion = regionList.length > 0 ? regionList[0].region : "지역 없음";
+      const tags = regionList.map(r => r.subregion || "").filter(Boolean);  // 빈 값 제외
+
+      const tagHTML = `
+        <span class="tag black">${mainRegion}</span>
+        ${tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+      `;
+
+      const imageSrc = Array.isArray(record.image_urls) && record.image_urls.length > 0
+        ? record.image_urls[0]
+        : "";
+
+      card.innerHTML = `
+        <img src="${imageSrc}" class="record-image" alt="기록 이미지" />
+        <div class="record-info">
+          <span class="emoji">${record.icon || ''}</span>
+          <span class="record-title">${record.title || '제목 없음'}</span>
+        </div>
+        <div class="tag-list">${tagHTML}</div>
+      `;
+
+      // 클릭 시 상세페이지 이동
+      card.addEventListener('click', () => {
+          window.location.href = `/travelList/region/${record.id}/detail/`;});
+
+      container.appendChild(card);
+    });
+  })
+  .catch(err => {
+    console.error("임시 포스트 로딩 실패:", err);
+  });
+
+      </script>
+
 
     <div class="modal-overlay" id="delete-modal">
       <div class="modal-content">
@@ -30,6 +83,5 @@
     </div>
   </div>
 
-  <script src="{% static 'travelPostTemp/travelPostTemp.js' %}"></script>
 </body>
 </html>

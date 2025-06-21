@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>도도기록</title>
   <link rel="stylesheet" href="{% static 'travelListDetail/travelListDetail.css' %}" />
 </head>
@@ -12,9 +12,9 @@
     <div class="top-bar">
       <img
         src="{% static 'travelListDetail/images/iconoir_nav-arrow-left.png' %}"
-
         class="back-icon"
-        onclick="location.href = 'detail.html?region=' + encodeURIComponent(regionParam)"
+        onclick="location.href = 'detail.html?region=' + encodeURIComponent(record.region || '지역')"
+        alt="뒤로가기"
       />
       <span class="page-title" id="page-title">제목</span>
     </div>
@@ -50,15 +50,66 @@
     </div>
 
     <div class="modal-overlay" id="delete-modal" style="display: none;">
-        <div class="modal-content">
-          <img src="{% static 'travelPostTemp/images/iconoir_warning-triangle-solid.svg' %}" alt="경고" class="warning-icon" />
-          <p>정말 삭제하시겠습니까?</p>
-          <button id="confirm-delete">삭제</button>
-          <button id="cancel-delete">취소</button>
-        </div>
+      <div class="modal-content">
+        <img src="{% static 'travelPostTemp/images/iconoir_warning-triangle-solid.svg' %}" alt="경고" class="warning-icon" />
+        <p>정말 삭제하시겠습니까?</p>
+        <button id="confirm-delete">삭제</button>
+        <button id="cancel-delete">취소</button>
       </div>
+    </div>
   </div>
 
-  <script src="{% static 'travelListDetail/travelListDetail.js' %}"></script>
+  <!-- JSON 데이터를 숨기기 -->
+  {{ post|json_script:"post_data" }}
+
+  <script>
+    // JSON 데이터를 파싱
+    const record = JSON.parse(document.getElementById("post_data").textContent);
+
+    // 렌더링 시작
+    document.getElementById("page-title").textContent = record.title || "제목 없음";
+
+    const titleInput = document.getElementById("title-input");
+    titleInput.value = record.title || "";
+
+    const baseChipEl = document.getElementById("base-chip");
+    baseChipEl.textContent = record.region || "지역";
+
+    const regionGroupEl = document.querySelector(".region-group");
+    if (record.districts && record.districts.length > 0) {
+      record.districts.forEach(district => {
+        const tag = document.createElement("div");
+        tag.className = "region-chip sub";
+        tag.textContent = district;
+        regionGroupEl.appendChild(tag);
+      });
+    }
+
+    const photoSlider = document.getElementById("photo-slider");
+    if (record.photos && record.photos.length > 0) {
+      photoSlider.style.display = "flex";
+      record.photos.forEach((dataUrl, idx) => {
+        const card = document.createElement("div");
+        card.className = "photo-card";
+
+        const img = document.createElement("img");
+        img.src = dataUrl;
+        card.appendChild(img);
+
+        const pageIndicator = document.createElement("div");
+        pageIndicator.className = "page-indicator";
+        pageIndicator.textContent = `${idx + 1}/${record.photos.length}`;
+        card.appendChild(pageIndicator);
+
+        photoSlider.appendChild(card);
+      });
+    }
+
+    const emojiDisplay = document.getElementById("emoji-display");
+    emojiDisplay.textContent = record.emoji || "";
+
+    const memoInput = document.getElementById("memo-input");
+    memoInput.value = record.memo || "";
+  </script>
 </body>
 </html>
