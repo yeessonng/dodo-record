@@ -60,6 +60,7 @@ def temp_posts(request):
             'title': post.title,
             'created_at': post.created_at.strftime('%Y-%m-%d %H:%M'),
             #'region': region_data,
+            'icon': post.icon,
             'body': post.body,
             'image_urls': image_urls,
         })
