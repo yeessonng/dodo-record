@@ -41,7 +41,6 @@ if (regionParam && regionParam !== '지역') {
 // 2) 세부 지역 칩 렌더링
 function renderDistrictChips() {
   regionGroupEl.querySelectorAll(".region-chip.sub").forEach(el => el.remove());
-  // 유진추가
 
   //광역시 chip 추가
   const tempRegion = localStorage.getItem("tempRegion");
@@ -127,9 +126,9 @@ if (postIdParam) {
     existingPhotos = Array.isArray(tempData.photos) ? [...tempData.photos] : [];
     renderDistrictChips();
     if (existingPhotos.length) renderPhotos(existingPhotos);
-    currentEmoji = tempData.emoji || "";
+    currentEmoji = tempData.icon || "";
     emojiDisplay.textContent = currentEmoji;
-    memoInput.value = tempData.memo || "";
+    memoInput.value = tempData.body || "";
   }
 }
 
@@ -240,7 +239,7 @@ document.querySelectorAll(".emoji-option").forEach(option => {
   });
 });
 
-// CSRF 토큰 꺼내기 (이 함수 먼저 정의해두세요)
+// CSRF 토큰 꺼내기
 function getCookie(name) {
   const cookies = document.cookie.split(";");
   for (let cookie of cookies) {
@@ -289,28 +288,38 @@ saveBtn.onclick = async () => {
 
 // 임시 저장
 tempSaveBtn.onclick = async () => {
+  console.log("임시저장 버튼 클릭됨");
+  console.log("title =", titleInput.value.trim());
+  console.log("body =", memoInput.value.trim());
+  console.log("icon =", currentEmoji);
 
-  const tempData = {
-    region: regionParam,
-    title: titleInput.value.trim(),
-    tags: [...selectedDistricts],
-    photos: [...existingPhotos],
-    emoji: currentEmoji,
-    memo: memoInput.value.trim(),
-    status: "false"  // 임시 저장 표시
-  };
+  try {
+    const response = await fetch("/travelPost/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-CSRFToken": getCookie("csrftoken")
+      },
+      body: new URLSearchParams({
+        title: titleInput.value.trim(),
+        body: memoInput.value.trim(),
+        icon: currentEmoji,
+        status: "false"
+      })
+    });
 
-  await fetch("/travelPost/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "X-CSRFToken": getCookie("csrftoken")
-    },
-    body: new URLSearchParams(tempData)
-  });
-
-  location.href = '/travelPost/Temp/';
+    if (response.redirected) {
+      location.href = response.url;
+    } else {
+      const result = await response.text(); // or response.json()
+      console.log("서버 응답:", result);
+    }
+  } catch (err) {
+    console.error("임시저장 중 오류 발생:", err);
+    alert("임시저장 중 오류가 발생했습니다.");
+  }
 };
+
 
 
 // 임시 목록 버튼

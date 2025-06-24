@@ -13,6 +13,8 @@ def create_post(request):
         icon = request.POST.get('icon')
         status = request.POST.get('status') == 'true'  # True면 최종 저장, False면 임시 저장
 
+        print(f"POST data - title: {title}, body: {body}, icon: {icon}, status: {status}")
+
         Post.objects.create(
             user=request.user,
             title=title,
@@ -21,7 +23,7 @@ def create_post(request):
             status=status,
         )
         # 임시 저장 후 또는 최종 저장 후 둘 다 임시 글 목록 페이지로 보내기
-        return redirect('travelPostTemp')
+        return redirect('temp_page')
 
     return render(request, 'travelPost/travelPost.html')
 

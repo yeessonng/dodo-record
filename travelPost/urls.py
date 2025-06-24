@@ -6,9 +6,10 @@ urlpatterns = [
     # 여행 기록 글쓰기 (저장, 임시저장)
     path('', views.create_post, name='travelPost'),
 
-    # 임시저장 목록 불러오기
-
+    # 임시저장 json
     path('tempList/', views.temp_posts, name='temp_posts_api'),
+
+    # 임시저장 목록 view
     path('Temp/', views.temp_page, name='temp_page'),
     # path('Temp/', views.temp, name='travelPostTemp'),
 
