@@ -17,15 +17,17 @@
 
     <div id="record-container"></div>
       <script>
-          fetch('/travelPost/tempList/')
-  .then(response => response.json())
-  .then(data => {
-    const container = document.getElementById("record-container");
-    container.innerHTML = '';  // 초기화
+          // let recordIdToDelete = null;
 
-    if (!data.posts || data.posts.length === 0) {
-      const empty = document.createElement("p");
-      empty.textContent = "임시 저장된 기록이 없습니다.";
+          fetch('/travelPost/tempList/')
+              .then(response => response.json())
+              .then(data => {
+                  const container = document.getElementById("record-container");
+                  container.innerHTML = '';  // 초기화
+
+                  if (!data.posts || data.posts.length === 0) {
+                      const empty = document.createElement("p");
+                      empty.textContent = "임시 저장된 기록이 없습니다.";
       container.appendChild(empty);
       return;
     }
@@ -70,6 +72,8 @@
         </div>
       `;
 
+        card.setAttribute("data-id", record.id);
+
       // 클릭 시 상세페이지 이동
       card.addEventListener('click', (e) => {
           if (e.target.closest('.card-menu') || e.target.closest('.card-menu-toggle')) {
@@ -97,7 +101,8 @@
           }
 
           function confirmDelete(buttonEl) {
-              cardToDelete = buttonEl.closest('.record-card');
+              const card = buttonEl.closest('.record-card');
+              recordIdToDelete = card.getAttribute('data-id');
               document.getElementById("delete-modal").style.display = "flex";
           }
 
@@ -106,14 +111,38 @@
               cardToDelete = null;
           }
 
-          function deleteCard() {
-              if (!cardToDelete) return;
-              const index = Number(cardToDelete.dataset.index);
-              data.splice(index, 1);
-              localStorage.setItem("tempRecords", JSON.stringify(data));
-              cardToDelete.remove();
-              closeModal();
+          function getCookie(name) {
+              const cookies = document.cookie.split(";");
+              for (let cookie of cookies) {
+                  const [key, value] = cookie.trim().split("=");
+                  if (key === name) return decodeURIComponent(value);
+              }
+              return null;
           }
+
+          function deleteCard() {
+
+              if (!recordIdToDelete) return;
+
+              fetch(`/travelPost/Temp/delete/${recordIdToDelete}/`, {
+                  method: 'DELETE',
+                  headers: {
+                      "X-CSRFToken": getCookie("csrftoken")
+                  },
+              })
+                  .then(response => {
+                      if (response.ok) {
+                          document.querySelector(`.record-card[data-id="${recordIdToDelete}"]`)?.remove();
+                          closeModal();
+                      } else {
+                          alert("삭제 실패!");
+                      }
+                  })
+                  .catch(err => {
+                      console.error("삭제 요청 실패:", err);
+                  });
+}
+
 
 
       </script>

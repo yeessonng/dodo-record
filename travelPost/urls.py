@@ -16,4 +16,7 @@ urlpatterns = [
     # 지역 선택
     path('selectLocal/', views.select_local, name='travelSelectLocal'),
 
+    # 기록 삭제
+    path('Temp/delete/<int:record_id>/', views.delete_temp_record, name='delete_temp_record'),
+
 ]

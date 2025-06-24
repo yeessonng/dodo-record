@@ -86,3 +86,14 @@ def select_local(request):
         'regions': regions,
         'subregions': subregions
     })
+
+# 임시저장 기록 삭제
+def delete_temp_record(request, record_id):
+    if request.method == 'DELETE':
+        try:
+            record = Post.objects.get(id=record_id)
+            record.delete()
+            return JsonResponse({'success': True})
+        except Post.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Record not found'}, status=404)
+    return JsonResponse({'error': 'Invalid request'}, status=400)
