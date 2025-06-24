@@ -96,6 +96,26 @@
               }
           }
 
+          function confirmDelete(buttonEl) {
+              cardToDelete = buttonEl.closest('.record-card');
+              document.getElementById("delete-modal").style.display = "flex";
+          }
+
+          function closeModal() {
+              document.getElementById("delete-modal").style.display = "none";
+              cardToDelete = null;
+          }
+
+          function deleteCard() {
+              if (!cardToDelete) return;
+              const index = Number(cardToDelete.dataset.index);
+              data.splice(index, 1);
+              localStorage.setItem("tempRecords", JSON.stringify(data));
+              cardToDelete.remove();
+              closeModal();
+          }
+
+
       </script>
 
 
