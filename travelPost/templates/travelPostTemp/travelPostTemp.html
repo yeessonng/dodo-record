@@ -53,26 +53,55 @@
           <span class="emoji">${record.icon || ''}</span>
           <span class="record-title">${record.title || '제목 없음'}</span>
         </div>
-        <div class="tag-list">${tagHTML}</div>
+        <div class="card-footer">
+            <div class="tag-list">${tagHTML}</div>
+            <div class="card-menu-toggle" onclick="toggleMenu(this)">⋯</div>
+        </div>
+        <div class="card-menu">
+            <button class="menu-item edit" onclick="editCard(${index})">
+                <img src="{% static 'travelPostTemp/images/iconoir_map-pin.svg' %}" alt="편집 아이콘" />
+            <span>편집하기</span>
+            </button>
+            <hr />
+            <button class="menu-item delete" onclick="confirmDelete(this)">
+                <img src="{% static 'travelPostTemp/images/iconoir_trash.svg' %}" alt="삭제 아이콘" />
+                <span>삭제하기</span>
+            </button>
+        </div>
       `;
 
       // 클릭 시 상세페이지 이동
-      card.addEventListener('click', () => {
+      card.addEventListener('click', (e) => {
+          if (e.target.closest('.card-menu') || e.target.closest('.card-menu-toggle')) {
+              return;
+          }
           window.location.href = `/travelList/region/${record.id}/detail/`;});
 
       container.appendChild(card);
     });
   })
-  .catch(err => {
-    console.error("임시 포스트 로딩 실패:", err);
-  });
+              .catch(err => {
+                  console.error("임시 포스트 로딩 실패:", err);
+              });
+
+          function toggleMenu(button) {
+              const card = button.closest('.record-card');
+              const menu = card.querySelector('.card-menu');
+
+              if (menu.style.display === 'block') {
+                  menu.style.display = 'none';
+              } else {
+                  document.querySelectorAll('.card-menu').forEach(m => m.style.display = 'none');
+                  menu.style.display = 'block';
+              }
+          }
 
       </script>
 
 
     <div class="modal-overlay" id="delete-modal">
       <div class="modal-content">
-        <img src="{% static 'travelPostTemp/images/iconoir_warning-triangle-solid.svg' %}" alt="경고" class="modal-icon" />
+        <img src="{% static '/travelPostTemp/images/iconoir_warning-triangle-solid.svg' %}" alt="경고" class="modal-icon" />
         <p>삭제하시겠어요?</p>
         <p>기록을 삭제하면 복구할 수 없어요!</p>
         <div class="modal-buttons">
